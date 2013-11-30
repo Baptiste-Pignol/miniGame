@@ -1,0 +1,205 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html, body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+}
+div {
+	overflow: hidden;
+	-o-text-overflow: ellipsis; /* pour Opera 9 */
+	text-overflow: ellipsis;
+}
+/* La page qui contient le jeux */
+div#page {
+	width: 85%;
+	margin: 0;
+	padding: 0;
+	min-height: 100%;
+	position:relative;
+	left:15%;
+	top:0%;
+}
+
+/* La page qui contient les personnes en lignes */
+div#chat {
+	width: 15%;
+	margin: 0;
+	padding: 0;
+	min-height: 100%;
+	position:relative;
+	top:-100%;
+	left:0%;
+}
+
+/* Le style des fenêtres de discussion*/
+div.chatFen {
+	width: 20%;
+	height: 30%;
+	margin: 0;
+	padding: 0;
+	position:absolute;
+	bottom:0%;
+	overflow-y: scroll;
+}
+
+/* La position des fenêtre de discussion quand il y en a moins que 5 exclus */
+div#chatCollapse1 {
+	position:absolute;
+	left:15%
+}
+div#chatCollapse2 {
+	position:absolute;
+	left:35%
+}
+div#chatCollapse3 {
+	position:absolute;
+	left:55%
+}
+div#chatCollapse4 {
+	position:absolute;
+	left:75%
+}
+/*
+div#chatCollapse5 {
+	position:absolute;
+	left:55%
+}
+div#chatCollapse6 {
+	position:absolute;
+	left:65%
+}
+div#chatCollapse7 {
+	position:absolute;
+	left:75%
+}
+div#chatCollapse8 {
+	position:absolute;
+	left:85%
+}
+*/
+
+/* Le position des fenêtres de discussion quand il y en a 5 ou plus */
+div#chatCollapseMax1 {
+	position:absolute;
+	left:17.5%
+}
+div#chatCollapseMax2 {
+	position:absolute;
+	left:37.5%
+}
+div#chatCollapseMax3 {
+	position:absolute;
+	left:57.5%
+}
+div#chatCollapseMax4 {
+	position:absolute;
+	left:77.5%
+}
+/*
+div#chatCollapseMax5 {
+	position:absolute;
+	left:57.5%
+}
+div#chatCollapseMax6 {
+	position:absolute;
+	left:67.5%
+}
+div#chatCollapseMax7 {
+	position:absolute;
+	left:77.5%
+}
+div#chatCollapseMax8 {
+	position:absolute;
+	left:87.5%
+}
+*/
+
+/* Les flèches pour voir les fenêtre de discussion supplémentaire */
+div#flecheDroite {
+	width: 2.5%;
+	margin: 0;
+	padding: 0;
+	position:absolute;
+	bottom:0%;
+	left:97.5%
+}
+div#flecheDroite:hover {
+	color: blue;
+	background-color: grey;
+}
+div#flecheDroite:active {
+	color: blue;
+	background-color: green;
+}
+div#flecheGauche {
+	width: 2.5%;
+	margin: 0;
+	padding: 0;
+	position:absolute;
+	bottom:0%;
+	left:15%
+}
+div#flecheGauche:hover {
+	color: blue;
+	background-color: grey;
+}
+div#flecheGauche:active {
+	color: blue;
+	background-color: green;
+}
+.fermerChatFen {
+	margin: 0;
+	padding: 0;
+	position:absolute;
+	top:0%;
+	right:3%
+}
+.fermerChatFen:hover {
+	color:orange;
+}
+.fermerChatFen:active {
+	color:red;
+}
+.baisserChatFen {
+	margin: 0;
+	padding: 0;
+	position:absolute;
+	top:0%;
+	right:10%
+}
+.baisserChatFen:hover {
+	color:yellow;
+}
+.baisserChatFen:active {
+	color:orange;
+}
+.chatPanelDiv {
+	position:relative;
+	width: 80%;
+
+}
+.online {
+	width: 10%;
+	color: green;
+	overflow: visible;
+}
+.absent {
+	width: 10%;
+	color: red;
+	overflow: visible;
+}
+.busy {
+	width: 10%;
+	color: orange;
+	overflow: visible;
+}
+
+.chatPanelRow {
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+}

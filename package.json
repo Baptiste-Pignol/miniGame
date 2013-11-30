@@ -1,0 +1,16 @@
+{
+  "name": "miniJeux",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Baptiste Pignol",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "express": "~3.4.5",
+    "socket.io": "~0.9.16",
+    "ent": "~0.1.0"
+  }
+}

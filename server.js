@@ -33,6 +33,7 @@ function remove(pseudo) {
 app.use('/views', express.static(__dirname + '/views'));
 app.use('/dist', express.static(__dirname + '/views/dist'));
 app.use('/css', express.static(__dirname + '/views/perso/css'));
+app.use('/js', express.static(__dirname + '/views/perso/js'));
 app.use(express.bodyParser());
 
 app.get("/", function (req, res) {

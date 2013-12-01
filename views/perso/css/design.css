@@ -1,4 +1,5 @@
 * {
+	cursor:default;
 	margin: 0;
 	padding: 0;
 }
@@ -38,29 +39,37 @@ div#chat {
 
 /* Le style des fenêtres de discussion*/
 div.chatFen {
-	width: 20%;
+	width: 25%;
 	height: 30%;
 	margin: 0;
 	padding: 0;
 	position:absolute;
 	bottom:0%;
-	overflow-y: scroll;
+	/*overflow-y: scroll;*/
+}
+
+div.chatFenCollapse {
+	width: 25%;
+	margin: 0;
+	padding: 0;
+	position:absolute;
+	bottom:0%;
 }
 
 /* La position des fenêtre de discussion quand il y en a moins que 5 exclus */
-div#chatCollapse1 {
+div.discussion1 {
 	position:absolute;
-	left:15%
+	left:0%
 }
-div#chatCollapse2 {
+div.discussion2 {
 	position:absolute;
-	left:35%
+	left:25%
 }
-div#chatCollapse3 {
+div.discussion3 {
 	position:absolute;
-	left:55%
+	left:50%
 }
-div#chatCollapse4 {
+div.discussion4 {
 	position:absolute;
 	left:75%
 }
@@ -201,4 +210,22 @@ div#flecheGauche:active {
 .chatPanelRow {
 	border-bottom-style: solid;
 	border-bottom-width: 1px;
+}
+.cursorPointer {
+	cursor:pointer;
+}
+.contentChatWindow {
+	position: absolute;
+	width: 100%;
+	min-height: 50%;
+	bottom: 20%;
+	left:0%;
+	overflow-y: scroll !important;
+}
+.inputChatWindow {
+	position: absolute;
+	width: 100%;
+	height: 20%;
+	bottom: 0%;
+	left:0%;
 }

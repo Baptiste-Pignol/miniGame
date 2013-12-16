@@ -190,6 +190,7 @@ div#flecheGauche:active {
 .chatPanelDiv {
 	position:relative;
 	width: 80%;
+	float: right;
 
 }
 .online {
@@ -229,4 +230,8 @@ div#flecheGauche:active {
 	height: 20%;
 	bottom: 0%;
 	left:0%;
+}
+
+.chatPanelRow > img {
+	float: left;
 }

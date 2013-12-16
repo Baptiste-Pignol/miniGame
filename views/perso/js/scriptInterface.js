@@ -1,5 +1,6 @@
 var status = "online";
       var socket = io.connect('http://localhost:8080');
+      var EXTRACT_URL_REG = /\b((?:https?:\/\/|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/gi;
       socket.emit("connect_client", PSEUDO);
       // client connection
       socket.on('new_client_connected', function(client) {
@@ -26,6 +27,14 @@ var status = "online";
       socket.on('status', function(data) {
         $("#AUTO"+data.pseudo).removeClass("absent busy online").addClass(data.status);
         updateIHMDiscussion();
+      });
+
+      socket.on('msg', function(data) {
+        if (data.msg.author.replace("#AUTO_CHATFORM_","") == PSEUDO) {
+          addDiscussion(data.emitter, true);
+          data.msg.author = "#AUTO_CHATFORM_"+data.emitter;
+          ecrireMsg(data.msg);
+        }
       });
 
       function changeStatus() {
@@ -57,22 +66,32 @@ var status = "online";
         return index;
       }
 
-      function addDiscussion(pseudo) {
+      function addDiscussion(pseudo, notCollapse) {
         if (indexOfDiscussion(pseudo) == -1) {
           discussion.push({pseudo:pseudo, message:[], collapse:false, unReadMessage:false});
         }
         else {
-          toggleCollapseDiscussion(pseudo);
+          if (!notCollapse)
+            toggleCollapseDiscussion(pseudo);
         }
         updateIHMDiscussion();
       }
 
       function removeDiscussion(pseudo) {
         var index = indexOfDiscussion(pseudo);
-        if (index !== -1) {
+        if (index !== -1) { 
           discussion.splice(index, 1);
         }
         updateIHMDiscussion();
+      }
+
+      function writeOnDiscussion(pseudo, texte) {
+        console.log(pseudo);
+        console.log(texte);
+        var index = indexOfDiscussion(pseudo);
+        if (index !== -1) {
+          discussion[index].text ? discussion[index].text += texte : discussion[index].text = texte;
+        }
       }
 
       function toggleCollapseDiscussion(pseudo) {
@@ -105,18 +124,23 @@ var status = "online";
             }
 
             if (!val.collapse) {
-              chatWindow += "<div class='panel panel-default chatFen discussion"+(idx+1)+"' id='AUTO_CHAT_'"+val.pseudo+">";
+              chatWindow += "<div class='panel panel-default chatFen discussion"+(idx+1)+"' id='AUTO_CHAT_"+val.pseudo+"'>";
               chatWindow += "<div class='panel-heading'>";
               chatWindow += "<h2 class='panel-title text-center text-"+classe+"' style='font-weight : bold;'>"+val.pseudo+"</h2>";
               chatWindow += "<p class='glyphicon glyphicon-chevron-down baisserChatFen' onClick='toggleCollapseDiscussion(\""+val.pseudo+"\")'></p>";
               chatWindow += "<p class='glyphicon glyphicon-remove fermerChatFen' onClick='removeDiscussion(\""+val.pseudo+"\")'></p> </div>";
               chatWindow += "<div class='panel-body'>";
-              chatWindow += "<div class=\"contentChatWindow\"></div>";
-              chatWindow += "<input class=\"inputChatWindow\"type=\"text\" onKeydown=\"ListenKeyPressed();\"></input>";
+              chatWindow += "<div class=\"contentChatWindow\" id=\"AUTO_CHATCONTENT_"+val.pseudo+"\">";
+              console.log(val);
+              if (val.text) {
+                chatWindow += val.text;
+              }
+              chatWindow += "</div>";
+              chatWindow += "<input class=\"inputChatWindow\"type=\"text\" id='AUTO_CHATFORM_"+val.pseudo+"' onKeydown=\"ListenKeyPressed(event,'AUTO_CHATFORM_"+val.pseudo+"');\"></input>";
               chatWindow += "</div> </div>";
             }
             else {
-              chatWindow += "<div class='alert alert-"+classe+" chatFenCollapse discussion"+(idx+1)+"' id='AUTO_CHAT_'"+val.pseudo+">";
+              chatWindow += "<div class='alert alert-"+classe+" chatFenCollapse discussion"+(idx+1)+"' id='AUTO_CHAT_"+val.pseudo+"'>";
               chatWindow += "<h2 class='panel-title text-center text-"+classe+"' style='font-weight : bold;'>"+val.pseudo+"</h2>";
               chatWindow += "<p class='glyphicon glyphicon-chevron-up baisserChatFen' onClick='toggleCollapseDiscussion(\""+val.pseudo+"\")'></p>";
               chatWindow += "<p class='glyphicon glyphicon-remove fermerChatFen' '></p> </div>";
@@ -127,9 +151,29 @@ var status = "online";
         }
       }
       //onClick='removeDiscussion(\""+val.pseudo+"\")
-      /*
-      function ListenKeyPressed () {
+      
+      function ListenKeyPressed (event, id) {
         if(event.keyCode==13) {
-          console.log("BUMP!!!");
+          sendMessage(id);
         }
-      }*/
+      }
+
+      function  sendMessage(id) {
+        id = "#"+id;
+        var msg = {author: id, text: $(id).val()};
+        $(id).val("");
+        socket.emit('sendMessage', msg);
+        ecrireMsg(msg);
+      }
+
+
+      function ecrireMsg(msg) {
+        var idFen = msg.author.replace("FORM", "CONTENT");
+        console.log(idFen);
+        (msg.text.match(EXTRACT_URL_REG) || []).forEach(function(url){
+          msg.text = msg.text.replace(url, "<a href='"+url+"' target=_blank>"+url+"</a>");
+        });
+
+         $(idFen).append("<p>"+msg.text+"</p>");
+         writeOnDiscussion(msg.author.replace("#AUTO_CHATFORM_", ""), "<p>"+msg.text+"</p>");
+      }

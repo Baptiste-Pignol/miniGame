@@ -218,7 +218,8 @@ div#flecheGauche:active {
 	position: absolute;
 	width: 100%;
 	min-height: 50%;
-	bottom: 20%;
+	max-height: 80%;
+	top: 15%;
 	left:0%;
 	overflow-y: scroll !important;
 }

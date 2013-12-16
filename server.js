@@ -85,6 +85,15 @@ io.sockets.on('connection', function (socket, pseudo, status) {
 	})
 
 	// client message chat
+	socket.on('sendMessage', function(msg) {
+		console.log(msg);
+		socket.get('pseudo', function (error, pseudo) {
+			socket.broadcast.emit('msg', {emitter: pseudo, msg: msg});
+		});
+	});
+
+
+	
 
 	/* ... */
 

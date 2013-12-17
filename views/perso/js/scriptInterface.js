@@ -2,6 +2,7 @@ var status = "online";
       var socket = io.connect('http://localhost:8080');
       var EXTRACT_URL_REG = /\b((?:https?:\/\/|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/gi;
       socket.emit("connect_client", PSEUDO);
+      console.log(PSWD);
       // client connection
       socket.on('new_client_connected', function(client) {
         $( "#chatPanel" ).empty();
@@ -30,11 +31,9 @@ var status = "online";
       });
 
       socket.on('msg', function(data) {
-        if (data.msg.author.replace("#AUTO_CHATFORM_","") == PSEUDO) {
-          addDiscussion(data.emitter, true);
-          data.msg.author = "#AUTO_CHATFORM_"+data.emitter;
-          ecrireMsg(data.msg);
-        }
+        addDiscussion(data.msg.author, true);
+        data.msg.dest = "#AUTO_CHATFORM_"+data.msg.author;
+        ecrireMsg(data.msg);
       });
 
       function changeStatus() {
@@ -160,7 +159,7 @@ var status = "online";
 
       function  sendMessage(id) {
         id = "#"+id;
-        var msg = {author: id, text: $(id).val()};
+        var msg = {author: "", dest: id, text: $(id).val()};
         $(id).val("");
         socket.emit('sendMessage', msg);
         ecrireMsg(msg);
@@ -168,12 +167,12 @@ var status = "online";
 
 
       function ecrireMsg(msg) {
-        var idFen = msg.author.replace("FORM", "CONTENT");
+        var idFen = msg.dest.replace("FORM", "CONTENT");
         console.log(idFen);
         (msg.text.match(EXTRACT_URL_REG) || []).forEach(function(url){
           msg.text = msg.text.replace(url, "<a href='"+url+"' target=_blank>"+url+"</a>");
         });
 
          $(idFen).append("<p>"+msg.text+"</p>");
-         writeOnDiscussion(msg.author.replace("#AUTO_CHATFORM_", ""), "<p>"+msg.text+"</p>");
+         writeOnDiscussion(msg.dest.replace("#AUTO_CHATFORM_", ""), "<p>"+msg.text+"</p>");
       }

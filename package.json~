@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Baptiste Pignol, François-Xavier Hibon",
-  "license": "DO NOT COPY MY CODE!!!",
+  "license": "BSD-2-Clause",
   "dependencies": {
     "express": "~3.4.5",
     "socket.io": "~0.9.16",

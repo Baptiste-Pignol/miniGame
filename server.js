@@ -4,7 +4,10 @@ var express = require('express'),
     server = require('http').createServer(app),
     ent = require('ent'),
     io = require('socket.io').listen(server),
-    client = [];
+    crypto = require('crypto'),
+    client = [],
+    listSocket = [];
+
 
 // function
 function verif(pseudo, password) {
@@ -44,9 +47,10 @@ app.post("/game", function (req, res) {
 	console.log("game");
 	var pseudo = req.body.pseudo;
 	var password = req.body.psw;
+	var p = crypto.createHash('md5').update(password).digest("hex");
 
 	if (verif(pseudo, password)) {
-		res.render('game.ejs', {pseudo: pseudo});
+		res.render('game.ejs', {pseudo: pseudo, password: p});
 	}
 	else {
 		res.render('home.ejs');
@@ -55,6 +59,7 @@ app.post("/game", function (req, res) {
 
 // io
 io.sockets.on('connection', function (socket, pseudo, status) {
+	listSocket.push(socket);
 	console.log("connection");
 
 	// client chat interface
@@ -86,9 +91,17 @@ io.sockets.on('connection', function (socket, pseudo, status) {
 
 	// client message chat
 	socket.on('sendMessage', function(msg) {
-		console.log(msg);
 		socket.get('pseudo', function (error, pseudo) {
-			socket.broadcast.emit('msg', {emitter: pseudo, msg: msg});
+			listSocket.forEach(function (val) {
+				val.get('pseudo', function (error, destPseudo) {
+					var dest = msg.dest.replace("#AUTO_CHATFORM_", "");
+					if (destPseudo == dest) {
+						console.log("passage dans le if");
+						msg.author = pseudo;
+						val.emit('msg', {msg: msg});
+					}
+				});
+			});
 		});
 	});
 
